@@ -68,6 +68,13 @@ p {
   }
 }
 
+#logout {
+  cursor: default;
+  &:hover {
+    background-color: transparent;
+  }
+}
+
 /* footer */
 
 footer {
@@ -149,7 +156,6 @@ section.user_info {
   max-width: 50px;
   border-radius: 50%;
 }
-
 
 /* forms */
 
