@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
+use Mail;
 
 class SessionsController extends Controller
 {
@@ -32,9 +33,16 @@ class SessionsController extends Controller
         ];
 
         if (Auth::attempt($credentials, $request->has('remember'))) {
-            session()->flash('success', '欢迎回来！');
+            if (auth()->user()->activated) {
+                session()->flash('success', '欢迎回来！');
 
-            return redirect()->intended(route('users.show', auth()->user()));
+                return redirect()->intended(route('users.show', auth()->user()));
+            } else {
+                auth()->logout();
+                session()->flash('warning', '你的账号未激活，请检查邮箱中的注册邮件进行激活。');
+
+                return redirect('/');
+            }
         } else {
             session()->flash('danger', '很抱歉，你的邮箱密码不匹配');
 
@@ -46,6 +54,7 @@ class SessionsController extends Controller
     {
         Auth::logout();
         session()->flash('success', '您已成功退出！');
+
         return redirect()->route('login');
     }
 }
