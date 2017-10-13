@@ -6,18 +6,23 @@ use Illuminate\Http\Request;
 
 class StaticPagesController extends Controller
 {
-  public function home()
-  {
-      return view('static_pages/home');
-  }
+    public function home()
+    {
+        $feed_items = [];
+        if (auth()->check()) {
+          $feed_items = auth()->user()->feed()->paginate(30);
+        }
 
-  public function help()
-  {
-      return view('static_pages/help');
-  }
+        return view('static_pages/home',compact('feed_items'));
+    }
 
-  public function about()
-  {
-      return view('static_pages/about');
-  }
+    public function help()
+    {
+        return view('static_pages/help');
+    }
+
+    public function about()
+    {
+        return view('static_pages/about');
+    }
 }
